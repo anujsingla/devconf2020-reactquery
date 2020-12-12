@@ -4,20 +4,31 @@ import { useQuery } from 'react-query';
 import axios from 'axios';
 
 function ReactQueryWay() {
-    const { isLoading, isError, data } = useQuery('repoData', () =>
-        axios('https://api.github.com/repos/anujsingla/patternfly-react')
-    );
+    const { isLoading, isError, data, error } = useQuery('repoData', async () => {
+        // show isLoading state, dummy wait
+        // await new Promise((resolve) => setTimeout(resolve, 500));
+        // if (true) {
+        //     throw new Error('error message');
+        // }
+        return axios
+            .get('http://newsapi.org/v2/everything?q=world&sortBy=publishedAt&apiKey=f02b2a0ecd7a4e41977d296648ad94b7')
+            .then((res) => res?.data?.articles ?? []);
+    });
+
+    if (isError) {
+        return <>{error.message}</>;
+    }
 
     return (
-        <div className="App">
-            {isError && <div>not able to fetch data</div>}
+        <div>
             {isLoading ? (
                 <div>Loading data</div>
             ) : (
-                <div>
-                    <h1>{data.data.name}</h1>
-                    <p>{data.data.description}</p>
-                </div>
+                <>
+                    {data.map((article, index) => (
+                        <div key={index}>{article?.title}</div>
+                    ))}
+                </>
             )}
         </div>
     );
