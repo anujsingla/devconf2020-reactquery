@@ -13,7 +13,7 @@ const getTasks = async () => {
 
 const postTasks = async (newTask) => {
     await new Promise((resolve) => setTimeout(resolve, 1500));
-    // fake get call
+    // fake post call
     return task.push(newTask);
 };
 
