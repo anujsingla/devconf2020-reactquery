@@ -17,7 +17,7 @@ function App() {
             {/* <ReactQueryWay /> */}
             {/* <Example3 /> */}
             <Example4 />
-            <ReactQueryDevtools initialIsOpen />
+            <ReactQueryDevtools />
         </div>
     );
 }
