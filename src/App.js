@@ -7,7 +7,8 @@ import { ReactQueryDevtools } from "react-query-devtools";
 // import Example5 from './Example5';
 // import Example6 from './Example6';
 // import Example7 from './Example7';
-import Example8 from './Example8';
+// import Example8 from './Example8';
+import Example9 from './Example9';
 
 // https://newsapi.org/
 // 'f02b2a0ecd7a4e41977d296648ad94b7'
@@ -24,7 +25,8 @@ function App() {
             {/* <Example5 /> */}
             {/* <Example6 /> */}
             {/* <Example7 /> */}
-            <Example8 />
+            {/* <Example8 /> */}
+            <Example9 />
             <ReactQueryDevtools initialIsOpen />
         </div>
     );
