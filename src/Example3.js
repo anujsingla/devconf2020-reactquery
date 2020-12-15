@@ -4,35 +4,33 @@ import { useQuery } from 'react-query';
 import axios from 'axios';
 import { useState } from 'react';
 
+const fetchUsers = async (key, searchUser) => {
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    return axios
+        .get(`https://api.github.com/search/users?q=${searchUser}&per_page=10&access_token=b5b35fbb94691b518e8f36f67a42d8b101195372`)
+        .then((res) => res?.data?.items ?? []);
+};
+
 // refetchOnWindowFocus -> not fetch data on load
-// staleTime -> how much time the data will stale from fresh.
+// staleTime -> how much time the data will fresh.
 // we can set time  in milisecond or infinity, it will not stale the
 // data.
 function Example3() {
-    const [showContent, setShowContent] = useState(true);
-    const { isLoading, data } = useQuery(
-        'repoData',
-        async () => {
-            await new Promise((resolve) => setTimeout(resolve, 100));
-            return axios
-                .get(
-                    'http://newsapi.org/v2/everything?q=world&sortBy=publishedAt&apiKey=f02b2a0ecd7a4e41977d296648ad94b7'
-                )
-                .then((res) => res?.data?.articles ?? []);
-        },
-        {
-            refetchOnWindowFocus: false,
-            staleTime: 5000
-        }
-    );
+    const { isLoading, data } = useQuery('repoData', fetchUsers, {
+        refetchOnWindowFocus: false,
+        staleTime: 5000,
+    });
 
     return (
         <div>
-            <button onClick={() => setShowContent(!showContent)}>Hide Content</button>
             {isLoading ? (
                 <div>Loading data</div>
             ) : (
-                <>{showContent && data.map((article, index) => <div key={index}>{article?.title}</div>)}</>
+                <>
+                    {data?.map((user, index) => (
+                        <div key={index}>{user?.login}</div>
+                    ))}
+                </>
             )}
         </div>
     );

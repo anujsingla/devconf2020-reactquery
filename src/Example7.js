@@ -41,7 +41,7 @@ function Example7() {
 
     return (
         <div>
-            {isAddingTask && <div>Adding task</div>}
+            {isAddingTask && <b>Adding task</b>}
             {isLoading ? (
                 <div>Loading data</div>
             ) : (

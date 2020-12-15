@@ -3,17 +3,20 @@ import { useQuery } from 'react-query';
 
 import axios from 'axios';
 
+const fetchUsers = async (key, searchUser) => {
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    // if (true) {
+    //     throw new Error('error message');
+    // }
+    return axios
+        .get(
+            `https://api.github.com/search/users?q=${searchUser}&per_page=10&access_token=b5b35fbb94691b518e8f36f67a42d8b101195372`
+        )
+        .then((res) => res?.data?.items ?? []);
+};
+
 function ReactQueryWay() {
-    const { isLoading, isError, data, error } = useQuery('repoData', async () => {
-        // show isLoading state, dummy wait
-        // await new Promise((resolve) => setTimeout(resolve, 500));
-        // if (true) {
-        //     throw new Error('error message');
-        // }
-        return axios
-            .get('http://newsapi.org/v2/everything?q=world&sortBy=publishedAt&apiKey=f02b2a0ecd7a4e41977d296648ad94b7')
-            .then((res) => res?.data?.articles ?? []);
-    });
+    const { isLoading, isError, data, error } = useQuery('repoData', fetchUsers);
 
     if (isError) {
         return <>{error.message}</>;
@@ -25,8 +28,8 @@ function ReactQueryWay() {
                 <div>Loading data</div>
             ) : (
                 <>
-                    {data.map((article, index) => (
-                        <div key={index}>{article?.title}</div>
+                    {data?.map((user, index) => (
+                        <div key={index}>{user?.login}</div>
                     ))}
                 </>
             )}

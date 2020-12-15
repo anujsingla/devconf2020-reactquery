@@ -18,8 +18,8 @@ function App() {
     return (
         <div className="App">
             {/* <TraditionalWayFetchData /> */}
-            {/* <ReactQueryWay /> */}
-            {/* <Example3 /> */}
+            {/* <ReactQueryWay />
+            <Example3 /> */}
             {/* <Example4 /> */}
             {/* <Example5 /> */}
             {/* <Example6 /> */}
