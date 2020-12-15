@@ -4,13 +4,13 @@ import { usePaginatedQuery } from 'react-query';
 import axios from 'axios';
 import { useState } from 'react';
 
-const fetchNews = async (key, page) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+const fetchUsers = async (key, page = 1) => {
+    await new Promise((resolve) => setTimeout(resolve, 100));
     return axios
         .get(
-            `http://newsapi.org/v2/everything?q=world&sortBy=publishedAt&pageSize=10&page=${page}&apiKey=f02b2a0ecd7a4e41977d296648ad94b7`
+            `https://api.github.com/search/users?q=anuj&page=${page}&per_page=10&access_token=b5b35fbb94691b518e8f36f67a42d8b101195372`
         )
-        .then((res) => res?.data?.articles ?? []);
+        .then((res) => res?.data?.items ?? []);
 };
 
 // usePaginatedQuery - same like useQuery, but only 1 difference is,
@@ -19,14 +19,15 @@ const fetchNews = async (key, page) => {
 
 function Example8() {
     const [page, setPageSize] = useState(1);
-    const { isLoading, data, isFetching } = usePaginatedQuery(['getNews', page], fetchNews);
+    const { isLoading, data, isFetching } = usePaginatedQuery(['getNames', page], fetchUsers);
 
     const nextPage = () => setPageSize(page + 1);
     const previousPage = () => setPageSize(page > 1 ? page - 1 : page);
 
     return (
         <div>
-            <br /><br />
+            <br />
+            <br />
             {isFetching && <b>Is fetching data</b>}
             <br />
             <br />
@@ -34,8 +35,8 @@ function Example8() {
                 <div>Loading data</div>
             ) : (
                 <>
-                    {data?.map((article, index) => (
-                        <div key={index}>{article?.title}</div>
+                    {data?.map((user, index) => (
+                        <div key={index}>{user?.login}</div>
                     ))}
                 </>
             )}

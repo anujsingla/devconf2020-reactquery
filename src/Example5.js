@@ -4,13 +4,11 @@ import { useQuery } from 'react-query';
 import axios from 'axios';
 import { useState } from 'react';
 
-const fetchNews = async (key, searchText) => {
+const fetchUsers = async (key, searchUser) => {
     await new Promise((resolve) => setTimeout(resolve, 100));
     return axios
-        .get(
-            `http://newsapi.org/v2/everything?q=${searchText}&sortBy=publishedAt&apiKey=f02b2a0ecd7a4e41977d296648ad94b7`
-        )
-        .then((res) => res?.data?.articles ?? []);
+        .get(`https://api.github.com/search/users?q=${searchUser}&per_page=10&access_token=b5b35fbb94691b518e8f36f67a42d8b101195372`)
+        .then((res) => res?.data?.items ?? []);
 };
 
 // dependent query
@@ -19,38 +17,40 @@ const fetchNews = async (key, searchText) => {
 // enabled -> it help to disable this query from automatically running
 function Example5() {
     const [searchText, setSearchText] = useState('');
-    const { isLoading, data } = useQuery(['searchText', searchText], fetchNews, {
+    const { isLoading, data } = useQuery(['searchText', searchText], fetchUsers, {
         enabled: searchText,
     });
-    const { data: secondData } = useQuery(['secondQuery', data && data[0]?.title], fetchNews, {
-        enabled: data && data[0]?.title,
+
+    const { data: secondData } = useQuery(['secondQuery', data && data[2]?.login], fetchUsers, {
+        enabled: data && data[2]?.login,
     });
 
     console.log('data', data);
-
     return (
-        <div>
-            <div>Search news:</div>
+        <>
             <input value={searchText} onChange={(event) => setSearchText(event.target.value)} />
-            {isLoading ? (
-                <div>Loading data</div>
-            ) : (
-                <>
-                    {data?.map((article, index) => (
-                        <div key={index}>{article?.title}</div>
-                    ))}
-                    {secondData && (
-                        <div>
-                            <br />
-                            <b>second query data:</b>
-                            {secondData?.map((article, index) => (
-                                <div key={index}>{article?.title}</div>
-                            ))}
-                        </div>
-                    )}
-                </>
-            )}
-        </div>
+
+            <div>
+                {isLoading ? (
+                    <div>Loading data</div>
+                ) : (
+                    <>
+                        {data?.map((user, index) => (
+                            <div key={index}>{user?.login}</div>
+                        ))}
+                    </>
+                )}
+                {secondData && (
+                    <div>
+                        <br />
+                        <b>second query data:</b>
+                        {secondData?.map((user, index) => (
+                            <div key={index}>{user?.login}</div>
+                        ))}
+                    </div>
+                )}
+            </div>
+        </>
     );
 }
 

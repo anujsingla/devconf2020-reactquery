@@ -4,13 +4,13 @@ import { useQuery } from 'react-query';
 import axios from 'axios';
 import { useState } from 'react';
 
-const fetchNews = async (key, searchText) => {
+const fetchUsers = async (key, searchUser) => {
     await new Promise((resolve) => setTimeout(resolve, 100));
     return axios
         .get(
-            `http://newsapi.org/v2/everything?q=${searchText}&sortBy=publishedAt&apiKey=f02b2a0ecd7a4e41977d296648ad94b7`
+            `https://api.github.com/search/users?q=${searchUser}&per_page=10&access_token=b5b35fbb94691b518e8f36f67a42d8b101195372`
         )
-        .then((res) => res?.data?.articles ?? []);
+        .then((res) => res?.data?.items ?? []);
 };
 
 // Query side effect
@@ -22,7 +22,7 @@ const fetchNews = async (key, searchText) => {
 
 function Example6() {
     const [searchText, setSearchText] = useState('');
-    const { isLoading, data } = useQuery(['searchText', searchText], fetchNews, {
+    const { isLoading, data } = useQuery(['searchText', searchText], fetchUsers, {
         enabled: searchText,
         // refetchInterval: 5000,
         // refetchIntervalInBackground: true,
@@ -45,8 +45,8 @@ function Example6() {
                 <div>Loading data</div>
             ) : (
                 <>
-                    {data?.map((article, index) => (
-                        <div key={index}>{article?.title}</div>
+                    {data?.map((user, index) => (
+                        <div key={index}>{user?.login}</div>
                     ))}
                 </>
             )}
